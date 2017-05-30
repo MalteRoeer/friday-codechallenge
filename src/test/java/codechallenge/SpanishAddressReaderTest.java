@@ -18,7 +18,14 @@ public class SpanishAddressReaderTest {
 	@Mock
 	private Source source;
 	
-	private AddressReader addressReader;
+	private AdvancedAddressReader addressReader;
+	
+	
+	private RegexParsingStrategy parsingStrategy;
+	
+	private Parser parser;
+	
+	private List<String[]> addressStore = new ArrayList<String[]>();
 	
 	@Before
 	public void setUp(){
@@ -27,17 +34,23 @@ public class SpanishAddressReaderTest {
 		addresses.add("Calle 39 No 1594");
 		
 		when(source.stream()).thenReturn(addresses.stream());
-		addressReader = new AdvancedAddressReader("(No)\\s{1}(\\d)*$", "");
+		
+		parsingStrategy = new RegexParsingStrategy("(No)\\s{1}(\\d)*$");
+		
+		parser = new RegexParser(addressStore, parsingStrategy);
+		
+		addressReader = new AdvancedAddressReader();
+		addressReader.registerParser(parser);
 		
 	}
 	
 	@Test
 	public void testSpanishAdressReader(){
 		
-		List<String[]> addresses = addressReader.read(source);
-		assertEquals("Calle 39", addresses.get(0)[0]);
-		assertEquals("No 1594", addresses.get(0)[1]);
-		assertEquals(1, addresses.size());
+		addressReader.read(source);
+		assertEquals("Calle 39", addressStore.get(0)[0]);
+		assertEquals("No 1594", addressStore.get(0)[1]);
+		assertEquals(1, addressStore.size());
 		
 	}
 	

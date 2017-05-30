@@ -33,9 +33,7 @@ public class AdvancedAddressReaderTest {
 	
 		addresses.add("fakefakefake");
 		
-		when(source.stream()).thenReturn(addresses.stream());
-		
-//		addressReader = new AdvancedAddressReader("(\\d+)(\\s*)([A-Za-z]*)$", "");		
+		when(source.stream()).thenReturn(addresses.stream());	
 		
 		parsingStrategy = new RegexParsingStrategy("(\\d+)(\\s*)([A-Za-z]*)$");
 		
